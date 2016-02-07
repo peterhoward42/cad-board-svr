@@ -1,7 +1,7 @@
 package server
 
 import (
-    "fmt"
+    "html/template"
     "net/http"
 )
 
@@ -10,5 +10,9 @@ func init() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "hiho, world!")
+    parsed_template, err := template.ParseFiles("static/template/index.html")
+	parsed_template.Execute(w, nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
