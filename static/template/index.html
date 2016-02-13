@@ -71,7 +71,7 @@
     </div class="container">
 </nav class="navbar navbar-default">
 
-<div class="container" id="sourceOfMouseMovements" onmousemove="mouseTrackingFunction(event)">
+<div class="container" id="sourceOfMouseMovements">
     <div class="row">
         <div class="col-md-12">
             <span class="glyphicon glyphicon-knight"></span>
@@ -261,16 +261,13 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 
-<script src="js/cadboardlib.js"></script>
+<script src="js/mouseEventTransmitter.js"></script>
 
-<!-- Register a Cadboard mouse tracker for the big central DIV -->
+<!-- Mouse tracking app -->
 <script>
-    var mouseTracker = new CadboardMouseTracker(document.getElementById("sourceOfMouseMovements"));
-
-    function mouseTrackingFunction(mouseMoveEvent) {
-        // Send to the tracker object
-        mouseTracker.handleMoveEvent(mouseMoveEvent);
-    };
+    app = {};
+    app.mouseTransmitter = mouseEventTransmitter(
+            document.getElementById("sourceOfMouseMovements"));
 </script>
 
 

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"appengine"
 	"appengine/memcache"
+	"fmt"
 )
 
 func init() {
@@ -14,7 +15,6 @@ func init() {
 
 func mainPageHandler(w http.ResponseWriter, r *http.Request) {
 	parsed_template, err := template.ParseFiles("static/template/index.html")
-	// how to use gui name in template exec fn
 	parsed_template.Execute(w, gui_data())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -22,18 +22,21 @@ func mainPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func mouseHandler(w http.ResponseWriter, r *http.Request) {
-	// extract the mouse x coordinate sent
-	x := r.FormValue("xcoord")
+	// Extract the mouse coordinates from the payload.
+	x := r.FormValue("X")
+	// Save them in memcache
 	ctx := appengine.NewContext(r)
-	ctx.Infof("request contains x coord string: %v", x)
+	ctx.Infof("request contains x coord %v", x)
 	storeXCoordInMemcache(ctx, x)
+	// Send reply that all is well.
+	fmt.Fprintf(w, "ok");
 }
 
 func storeXCoordInMemcache(ctx appengine.Context, x string) {
 	newMemcacheItem := &memcache.Item{Key: "mouse_x", Value: []byte(x)}
 	// Add the item to the cache (if not already present)
 	err := memcache.Add(ctx, newMemcacheItem)
-	// Ignore error that it is already present in cache, but react to other errors
+	// Ignore complaints about it being already present in the cache, but react to other errors
 	if err != memcache.ErrNotStored {
 		ctx.Infof("error adding item: %v", err)
 	}
