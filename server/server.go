@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"appengine"
 	"appengine/memcache"
-	"appengine/log"
 )
 
 func init() {
@@ -27,21 +26,21 @@ func mouseHandler(w http.ResponseWriter, r *http.Request) {
 	x := r.FormValue("xcoord")
 	ctx := appengine.NewContext(r)
 	ctx.Infof("request contains x coord string: %v", x)
-	storeXCoordInMemcache(ctx, x);
+	storeXCoordInMemcache(ctx, x)
 }
 
-func storeXCoordInMemcache(ctx appengine.Context, x string) void {
+func storeXCoordInMemcache(ctx appengine.Context, x string) {
 	newMemcacheItem := &memcache.Item{Key: "mouse_x", Value: []byte(x)}
 	// Add the item to the cache (if not already present)
 	err := memcache.Add(ctx, newMemcacheItem)
-	// Ignore error that is already present in cache, but react to other errors
+	// Ignore error that it is already present in cache, but react to other errors
 	if err != memcache.ErrNotStored {
 		ctx.Infof("error adding item: %v", err)
 	}
 	// Now overwrite the cached item regardless
 	err = memcache.Set(ctx, newMemcacheItem)
-	if err {
-		ctx.Errorf(ctx, "error setting item: %v", err)
+	if err != nil {
+		ctx.Errorf("error setting item: %v", err)
 	}
 }
 
