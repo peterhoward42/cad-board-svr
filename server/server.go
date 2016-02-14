@@ -24,27 +24,43 @@ func mainPageHandler(w http.ResponseWriter, r *http.Request) {
 func mouseHandler(w http.ResponseWriter, r *http.Request) {
 	// Extract the mouse coordinates from the payload.
 	x := r.FormValue("X")
+	y := r.FormValue("Y")
 	// Save them in memcache
 	ctx := appengine.NewContext(r)
-	ctx.Infof("request contains x coord %v", x)
-	storeXCoordInMemcache(ctx, x)
+	storeCoordInMemcache(ctx, x, y)
 	// Send reply that all is well.
-	fmt.Fprintf(w, "ok");
+
+	// Temporarily todo - retrieve it again too
+	position := retrieveCoordFromMemcache(ctx);
+	fmt.Fprintf(w, "ok, retrieved x: %s, y: %s", position.X, position.Y);
 }
 
-func storeXCoordInMemcache(ctx appengine.Context, x string) {
-	newMemcacheItem := &memcache.Item{Key: "mouse_x", Value: []byte(x)}
-	// Add the item to the cache (if not already present)
-	err := memcache.Add(ctx, newMemcacheItem)
-	// Ignore complaints about it being already present in the cache, but react to other errors
-	if err != memcache.ErrNotStored {
-		ctx.Infof("error adding item: %v", err)
+// Todo - should have proper type for the stored item with single definition.
+// Todo - should have single definition of the key string.
+// Todo - need error handling on memcache api calls.
+func storeCoordInMemcache(ctx appengine.Context, x string, y string) {
+	var positionToStore struct{X string; Y string}
+	positionToStore.X = x
+	positionToStore.Y = y
+	item := &memcache.Item{Key: "mousePosition", Object: positionToStore}
+	// We have to attempt to add it before setting it, to cope with first time,
+	// and with it having been evicted. We tolerate not-stored error because this will
+	// be the general case when it is present.
+	if err := memcache.Gob.Add(ctx, item); err != memcache.ErrNotStored {
+		ctx.Errorf("error adding item: %v", err)
 	}
-	// Now overwrite the cached item regardless
-	err = memcache.Set(ctx, newMemcacheItem)
-	if err != nil {
+	if err := memcache.Gob.Set(ctx, item); err != nil {
 		ctx.Errorf("error setting item: %v", err)
 	}
+}
+
+func retrieveCoordFromMemcache(ctx appengine.Context) struct{X string; Y string} {
+	var positionRetrieved struct{X string; Y string}
+	_, err := memcache.Gob.Get(ctx, "mousePosition", &positionRetrieved);
+	if (err != nil) {
+		ctx.Infof("error from gob set: %s", err)
+	}
+	return positionRetrieved;
 }
 
 // A data structure for the model part of the example GUI's model-view pattern.

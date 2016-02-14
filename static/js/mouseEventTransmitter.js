@@ -69,6 +69,7 @@ function mouseEventTransmitter(mouseEventSource) {
 
     // Handler to accept replies from the server.
     t.handlerForServerReply = function(reply) {
+        console.log("reply from server:", reply);
         t.waitingForServerReply = false;
     }
 
