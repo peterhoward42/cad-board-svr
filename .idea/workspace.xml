@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2ada5c11-4736-46a7-8b6f-a1ba628a352e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/js/mouseEventTransmitter.js" afterPath="$PROJECT_DIR$/static/js/mouseEventTransmitter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server.go" afterPath="$PROJECT_DIR$/server/server.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cad-board-svr.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,10 +24,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="server.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="server.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.71070236">
+            <state vertical-scroll-proportion="0.0">
               <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
               <folding />
             </state>
@@ -39,18 +37,18 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/template/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-14.807693">
               <caret line="269" column="47" selection-start-line="269" selection-start-column="47" selection-end-line="269" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mouseEventTransmitter.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="mouseEventTransmitter.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/js/mouseEventTransmitter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="71" column="49" selection-start-line="71" selection-start-column="49" selection-end-line="71" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.73913044">
+              <caret line="89" column="47" selection-start-line="89" selection-start-column="47" selection-end-line="89" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -75,8 +73,8 @@
         <option value="$PROJECT_DIR$/static/js/mousemovenetworkemitter.js" />
         <option value="$PROJECT_DIR$/static/js/cadboardlib.js" />
         <option value="$PROJECT_DIR$/static/template/index.html" />
-        <option value="$PROJECT_DIR$/static/js/mouseEventTransmitter.js" />
         <option value="$PROJECT_DIR$/server/server.go" />
+        <option value="$PROJECT_DIR$/static/js/mouseEventTransmitter.js" />
       </list>
     </option>
   </component>
@@ -620,9 +618,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/template/index.html">
+    <entry file="file://$PROJECT_DIR$/server/server.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
+          <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/template/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.807693">
           <caret line="269" column="47" selection-start-line="269" selection-start-column="47" selection-end-line="269" selection-end-column="47" />
           <folding />
         </state>
@@ -630,16 +636,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/mouseEventTransmitter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="71" column="49" selection-start-line="71" selection-start-column="49" selection-end-line="71" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/server.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71070236">
-          <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.73913044">
+          <caret line="89" column="47" selection-start-line="89" selection-start-column="47" selection-end-line="89" selection-end-column="47" />
           <folding />
         </state>
       </provider>
