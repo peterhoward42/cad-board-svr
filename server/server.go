@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"html/template"
 	"net/http"
 	"appengine"
@@ -8,9 +9,14 @@ import (
 	"fmt"
 )
 
+const mouseKey string = "MOUSEKEY"
+
+type xy struct { X, Y string }
+
 func init() {
 	http.HandleFunc("/", mainPageHandler)
-	http.HandleFunc("/mouse", mouseHandler)
+	http.HandleFunc("/mouseposnupdate", receiveMousePositionUpdate)
+	http.HandleFunc("/mouseposnquery", receiveMousePositionQuery)
 }
 
 func mainPageHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,28 +27,31 @@ func mainPageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func mouseHandler(w http.ResponseWriter, r *http.Request) {
-	// Extract the mouse coordinates from the payload.
-	x := r.FormValue("X")
-	y := r.FormValue("Y")
-	// Save them in memcache
+func receiveMousePositionUpdate(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
-	storeCoordInMemcache(ctx, x, y)
-	// Send reply that all is well.
-
-	// Temporarily todo - retrieve it again too
-	position := retrieveCoordFromMemcache(ctx);
-	fmt.Fprintf(w, "ok, retrieved x: %s, y: %s", position.X, position.Y);
+	// Extract the mouse coordinates from the payload.
+	mousePosn := xy{r.FormValue("X"), r.FormValue("Y")}
+	ctx.Errorf("struct literal: %v %v", mousePosn.X, mousePosn.Y)
+	// Save them in memcache
+	storeCoordInMemcache(ctx, &mousePosn);
+	fmt.Fprintf(w, "stored mouse to memcache ok");
 }
 
-// Todo - should have proper type for the stored item with single definition.
-// Todo - should have single definition of the key string.
-// Todo - need error handling on memcache api calls.
-func storeCoordInMemcache(ctx appengine.Context, x string, y string) {
-	var positionToStore struct{X string; Y string}
-	positionToStore.X = x
-	positionToStore.Y = y
-	item := &memcache.Item{Key: "mousePosition", Object: positionToStore}
+func receiveMousePositionQuery(w http.ResponseWriter, r *http.Request) {
+	ctx := appengine.NewContext(r)
+	var posnFromMemcache xy;
+	retrieveCoordFromMemcache(ctx, &posnFromMemcache)
+	js, err := json.Marshal(posnFromMemcache)
+	if err != nil {
+		ctx.Errorf("error with json marshal: %v", err)
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}
+}
+
+func storeCoordInMemcache(ctx appengine.Context, mousePosn *xy) {
+	item := &memcache.Item{Key: mouseKey, Object: *mousePosn}
 	// We have to attempt to add it before setting it, to cope with first time,
 	// and with it having been evicted. We tolerate not-stored error because this will
 	// be the general case when it is present.
@@ -54,13 +63,11 @@ func storeCoordInMemcache(ctx appengine.Context, x string, y string) {
 	}
 }
 
-func retrieveCoordFromMemcache(ctx appengine.Context) struct{X string; Y string} {
-	var positionRetrieved struct{X string; Y string}
-	_, err := memcache.Gob.Get(ctx, "mousePosition", &positionRetrieved);
+func retrieveCoordFromMemcache(ctx appengine.Context, mousePosn *xy) {
+	_, err := memcache.Gob.Get(ctx, mouseKey, mousePosn);
 	if (err != nil) {
 		ctx.Infof("error from gob set: %s", err)
 	}
-	return positionRetrieved;
 }
 
 // A data structure for the model part of the example GUI's model-view pattern.

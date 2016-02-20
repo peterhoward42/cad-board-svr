@@ -26,7 +26,7 @@ function mouseEventTransmitter(mouseEventSource) {
     t.top = t.rect.top;
     t.width = t.rect.right - t.rect.left;
     t.height = t.rect.bottom - t.rect.top;
-    t.serverUrl = "/mouse";
+    t.serverUrl = "/mouseposnupdate";
 
     t.negligibleMovementSize = 5;
     t.maxInFlight = 3; // The <N> in the description above.
